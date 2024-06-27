@@ -2,19 +2,15 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import CountryDetails from './CountryDetails.vue';
-// import ButtonSort from './ButtonSort.vue';
 
 const countriesData = ref([]);
 const selectedCountryIndex = ref(null);
-const countryNames = ref([]);
+let sortDirection = 'asc';
 
 onMounted(async () => {
   try {
     const response = await axios.get('https://restcountries.com/v3.1/all');
     countriesData.value = response.data;
-    countryNames.value = countriesData.value.map(
-      (country) => country.name.common
-    );
   } catch (error) {
     console.error('Error loading data', error);
   }
@@ -25,15 +21,25 @@ const showCountryDetails = (index) => {
     selectedCountryIndex.value === index ? null : index;
 };
 
-// const handleSort = (sortedCountries) => {
-//   countryNames.value = { ...countryNames.value, value: sortedCountries };
-// };
+const sortСountries = (countries) => {
+  countries.sort((a, b) => {
+    if (sortDirection === 'asc') {
+      return a.name.common.localeCompare(b.name.common);
+    } else {
+      return b.name.common.localeCompare(a.name.common);
+    }
+  });
+  sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+  console.log(countriesData.value);
+};
 </script>
 
 <template>
   <div class="countries">
     <h1 class="countries__title">Rest countries</h1>
-    <!-- <ButtonSort :countries="countryNames" @sortCountries="handleSort" /> -->
+    <button class="button" type="button" @click="sortСountries(countriesData)">
+      Sort countries alphabetically
+    </button>
     <ul class="countries__list">
       <li
         class="countries__item"
