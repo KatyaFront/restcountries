@@ -30,6 +30,11 @@ a {
   text-decoration: none;
 }
 
+button {
+  color: inherit;
+  cursor: pointer;
+}
+
 ul,
 h1,
 h2,

@@ -1,29 +1,53 @@
 <script setup>
 import { defineProps } from 'vue';
 
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-
-const countriesData = ref([]);
-
-onMounted(async () => {
-  try {
-    const response = await axios.get('https://restcountries.com/v3.1/all');
-    countriesData.value = response.data;
-    console.log(countriesData.value);
-  } catch (error) {
-    console.error('Error loading data', error);
-  }
+defineProps({
+  country: {
+    type: Object,
+    required: true,
+  },
 });
-
-const props = defineProps(['country']);
 </script>
 
 <template>
-  <div v-for="item in countriesData" :key="item.id">
-    <h2>{{ item.name.common }}</h2>
-    <p><strong>Capital: </strong>{{ item.capital }}</p>
-    <p><strong>Population: </strong>{{ item.population }}</p>
-    <p><strong>Area: </strong>{{ item.area }}</p>
+  <div class="details">
+    <img
+      class="details__img"
+      :src="country.flags.png"
+      :alt="country.name.common"
+    />
+    <p class="details__desc">
+      <strong>Capital: </strong>{{ country.capital[0] }}
+    </p>
+    <p class="details__desc">
+      <strong>Population: </strong>{{ country.population }}
+    </p>
+    <p class="details__desc"><strong>Area: </strong>{{ country.area }}</p>
+    <p class="details__desc"><strong>Region:</strong> {{ country.region }}</p>
+    <p class="details__desc">
+      <strong>Subregion:</strong> {{ country.subregion }}
+    </p>
   </div>
 </template>
+
+<style scoped>
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.details__desc {
+  font-size: 16px;
+}
+
+.details__img {
+  width: 120px;
+  height: 80px;
+}
+</style>

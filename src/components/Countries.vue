@@ -1,36 +1,52 @@
 <script setup>
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import CountryDetails from './CountryDetails.vue';
+// import ButtonSort from './ButtonSort.vue';
 
 const countriesData = ref([]);
-const emit = defineEmits(['show-country-details']);
+const selectedCountryIndex = ref(null);
+const countryNames = ref([]);
 
 onMounted(async () => {
   try {
     const response = await axios.get('https://restcountries.com/v3.1/all');
     countriesData.value = response.data;
-    console.log(countriesData.value);
+    countryNames.value = countriesData.value.map(
+      (country) => country.name.common
+    );
   } catch (error) {
     console.error('Error loading data', error);
   }
 });
 
-const showCountryDetails = (country) => {
-  emit('show-country-details', country);
+const showCountryDetails = (index) => {
+  selectedCountryIndex.value =
+    selectedCountryIndex.value === index ? null : index;
 };
+
+// const handleSort = (sortedCountries) => {
+//   countryNames.value = { ...countryNames.value, value: sortedCountries };
+// };
 </script>
 
 <template>
   <div class="countries">
     <h1 class="countries__title">Rest countries</h1>
+    <!-- <ButtonSort :countries="countryNames" @sortCountries="handleSort" /> -->
     <ul class="countries__list">
-      <li class="countries__item" v-for="item in countriesData" :key="item.id">
+      <li
+        class="countries__item"
+        v-for="(item, index) in countriesData"
+        :key="index"
+      >
         <a
           class="countries__link"
           href="#"
-          @click="showCountryDetails(country)"
+          @click.prevent="showCountryDetails(index)"
           >{{ item.name.common }}</a
         >
+        <CountryDetails v-if="selectedCountryIndex === index" :country="item" />
       </li>
     </ul>
   </div>
@@ -43,14 +59,35 @@ const showCountryDetails = (country) => {
   align-items: center;
 }
 .countries__title {
-  padding: 15px 15px 30px 15px;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 3px solid #125365;
+}
+
+.button {
+  margin-bottom: 30px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #125365;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+.button:hover {
+  color: #81a1a9;
+}
+
+.button:active {
+  transform: translateY(-5px);
 }
 
 .countries__list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 10px;
+  row-gap: 15px;
+  text-align: center;
 }
 
 .countries__link {
