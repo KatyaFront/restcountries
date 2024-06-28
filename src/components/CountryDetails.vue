@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, onMounted, onBeforeUnmount } from 'vue';
 
 defineProps({
   country: {
@@ -9,14 +9,32 @@ defineProps({
 });
 
 const showMoreDetails = ref(false);
+const containerMoreDetails = ref(null);
 
 const addMoreDetails = () => {
   showMoreDetails.value = !showMoreDetails.value;
 };
+
+const handleClickOutside = (event) => {
+  if (
+    containerMoreDetails.value &&
+    !containerMoreDetails.value.contains(event.target)
+  ) {
+    showMoreDetails.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
-  <div class="details bg-white dark:bg-gray-500">
+  <div class="details bg-white dark:bg-gray-500" ref="containerMoreDetails">
     <img
       class="details__img"
       :src="country.flags.png"
@@ -33,7 +51,7 @@ const addMoreDetails = () => {
     <p class="details__desc">
       <strong>Subregion:</strong> {{ country.subregion }}
     </p>
-    <a href="#" class="details__link" @click="addMoreDetails"
+    <a href="#" class="details__link" @click.prevent="addMoreDetails"
       >detailed information about the country</a
     >
     <div class="details" v-if="showMoreDetails">
@@ -64,6 +82,7 @@ const addMoreDetails = () => {
   align-items: center;
   row-gap: 10px;
   max-width: 30vw;
+  margin: 0 auto;
   margin-top: 5px;
   padding: 15px;
   border-radius: 10px;

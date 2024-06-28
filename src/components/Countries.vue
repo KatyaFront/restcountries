@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import CountryDetails from './CountryDetails.vue';
+import CountryMap from './CountryMap.vue';
 
 const countriesData = ref([]);
 const selectedCountryIndex = ref(null);
+const selectedCountryMapIndex = ref(null);
 let sortDirection = 'asc';
 
 onMounted(async () => {
@@ -21,6 +23,11 @@ const showCountryDetails = (index) => {
     selectedCountryIndex.value === index ? null : index;
 };
 
+const showCountryMap = (index) => {
+  selectedCountryMapIndex.value =
+    selectedCountryMapIndex.value === index ? null : index;
+};
+
 const sortСountries = (countries) => {
   countries.sort((a, b) => {
     if (sortDirection === 'asc') {
@@ -30,7 +37,6 @@ const sortСountries = (countries) => {
     }
   });
   sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-  console.log(countriesData.value);
 };
 </script>
 
@@ -56,6 +62,20 @@ const sortСountries = (countries) => {
           @click.prevent="showCountryDetails(index)"
           >{{ item.name.common }}</a
         >
+        <div>
+          <a
+            href="#"
+            class="countries__link-map"
+            @click.prevent="showCountryMap(index)"
+          >
+            show the country on the map</a
+          >
+          <CountryMap
+            v-if="selectedCountryMapIndex === index"
+            :country="item"
+          />
+        </div>
+
         <CountryDetails v-if="selectedCountryIndex === index" :country="item" />
       </li>
     </ul>
@@ -100,6 +120,13 @@ const sortСountries = (countries) => {
   text-align: center;
 }
 
+.countries__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .countries__link {
   transition: color 0.1s ease-in-out, border-bottom 0.1s ease-in-out;
 }
@@ -107,5 +134,12 @@ const sortСountries = (countries) => {
 .countries__link:hover {
   color: var(--secondary-text-color);
   border-bottom: 2px solid var(--secondary-text-color);
+}
+
+.countries__link-map {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--secondary-text-color);
+  border-bottom: 1px solid var(--secondary-text-color);
 }
 </style>
