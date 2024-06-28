@@ -37,7 +37,11 @@ const sortСountries = (countries) => {
 <template>
   <div class="countries">
     <h1 class="countries__title">Rest countries</h1>
-    <button class="button" type="button" @click="sortСountries(countriesData)">
+    <button
+      class="button bg-white dark:bg-gray-500 dark:border-gray-200"
+      type="button"
+      @click="sortСountries(countriesData)"
+    >
       Sort countries alphabetically
     </button>
     <ul class="countries__list">
@@ -67,21 +71,21 @@ const sortСountries = (countries) => {
 .countries__title {
   margin-bottom: 30px;
   text-align: center;
-  border-bottom: 3px solid #125365;
+  font-size: 36px;
+  font-weight: 700;
 }
 
 .button {
   margin-bottom: 30px;
   padding: 10px;
   font-size: 16px;
-  background-color: #fff;
   border-radius: 10px;
-  border: 1px solid #125365;
+  border: 1px solid;
   transition: color 0.3s ease-in-out, transform 0.3s;
 }
 
 .button:hover {
-  color: #81a1a9;
+  color: var(--secondary-text-color);
 }
 
 .button:active {
@@ -101,7 +105,7 @@ const sortСountries = (countries) => {
 }
 
 .countries__link:hover {
-  color: #81a1a9;
-  border-bottom: 2px solid #81a1a9;
+  color: var(--secondary-text-color);
+  border-bottom: 2px solid var(--secondary-text-color);
 }
 </style>

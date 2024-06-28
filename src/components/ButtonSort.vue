@@ -18,7 +18,11 @@ const sortСountries = () => {
 </script>
 
 <template>
-  <button class="button" type="button" @click="sortСountries()">
+  <button
+    class="button bg-white dark:bg-gray-500"
+    type="button"
+    @click="sortСountries()"
+  >
     Sort countries alphabetically
   </button>
 </template>
@@ -28,14 +32,13 @@ const sortСountries = () => {
   margin-bottom: 30px;
   padding: 10px;
   font-size: 16px;
-  background-color: #fff;
   border-radius: 10px;
-  border: 1px solid #125365;
+  border: 1px solid var(--primary-text-color);
   transition: color 0.3s ease-in-out, transform 0.3s;
 }
 
 .button:hover {
-  color: #81a1a9;
+  color: var(--secondary-text-color);
 }
 
 .button:active {

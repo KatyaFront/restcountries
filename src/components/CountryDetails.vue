@@ -16,7 +16,7 @@ const addMoreDetails = () => {
 </script>
 
 <template>
-  <div class="details">
+  <div class="details bg-white dark:bg-gray-500">
     <img
       class="details__img"
       :src="country.flags.png"
@@ -33,7 +33,6 @@ const addMoreDetails = () => {
     <p class="details__desc">
       <strong>Subregion:</strong> {{ country.subregion }}
     </p>
-    <!-- подробный детали -->
     <a href="#" class="details__link" @click="addMoreDetails"
       >detailed information about the country</a
     >
@@ -64,9 +63,9 @@ const addMoreDetails = () => {
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
+  max-width: 30vw;
   margin-top: 5px;
-  padding: 10px;
-  background-color: #fff;
+  padding: 15px;
   border-radius: 10px;
 }
 
@@ -82,7 +81,7 @@ const addMoreDetails = () => {
 .details__link {
   margin-top: 10px;
   font-size: 14px;
-  color: #81a1a9;
-  border-bottom: 1px solid #81a1a9;
+  color: var(--secondary-text-color);
+  border-bottom: 1px solid var(--secondary-text-color);
 }
 </style>
