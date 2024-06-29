@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
 
 defineProps({

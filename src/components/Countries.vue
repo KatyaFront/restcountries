@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import Button from './Button.vue';
 import CountryDetails from './CountryDetails.vue';
 import CountryMap from './CountryMap.vue';
 
@@ -43,40 +44,27 @@ const sortСountries = (countries) => {
 <template>
   <div class="countries">
     <h1 class="countries__title">Rest countries</h1>
-    <button
-      class="button bg-white dark:bg-gray-500 dark:border-gray-200"
-      type="button"
+    <Button
       @click="sortСountries(countriesData)"
-    >
-      Sort countries alphabetically
-    </button>
+      buttonText="Sort countries alphabetically"
+    />
     <ul class="countries__list">
       <li
         class="countries__item"
         v-for="(item, index) in countriesData"
         :key="index"
       >
-        <a
-          class="countries__link"
-          href="#"
-          @click.prevent="showCountryDetails(index)"
-          >{{ item.name.common }}</a
-        >
-        <div>
-          <a
-            href="#"
-            class="countries__link-map"
-            @click.prevent="showCountryMap(index)"
-          >
-            show the country on the map</a
-          >
-          <CountryMap
-            v-if="selectedCountryMapIndex === index"
-            :country="item"
+        <p>{{ item.name.common }}</p>
+        <div class="countries__buttons">
+          <Button
+            @click.prevent="showCountryDetails(index)"
+            buttonText="details"
           />
+          <Button @click.prevent="showCountryMap(index)" buttonText="map" />
         </div>
 
         <CountryDetails v-if="selectedCountryIndex === index" :country="item" />
+        <CountryMap v-if="selectedCountryMapIndex === index" :country="item" />
       </li>
     </ul>
   </div>
@@ -95,23 +83,6 @@ const sortСountries = (countries) => {
   font-weight: 700;
 }
 
-.button {
-  margin-bottom: 30px;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid;
-  transition: color 0.3s ease-in-out, transform 0.3s;
-}
-
-.button:hover {
-  color: var(--secondary-text-color);
-}
-
-.button:active {
-  transform: translateY(-5px);
-}
-
 .countries__list {
   display: flex;
   flex-direction: column;
@@ -120,11 +91,16 @@ const sortСountries = (countries) => {
   text-align: center;
 }
 
-.countries__list {
+.countries__item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  column-gap: 15px;
+}
+
+.countries__buttons {
+  display: flex;
   justify-content: center;
+  column-gap: 10px;
 }
 
 .countries__link {

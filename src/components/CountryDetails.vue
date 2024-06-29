@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 defineProps({
   country: {
