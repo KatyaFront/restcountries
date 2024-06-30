@@ -1,15 +1,19 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, inject, computed } from 'vue';
 
-defineProps({
-  country: {
-    type: Object,
-    required: true,
-  },
+const props = defineProps({
+  countryName: String,
+  required: true,
 });
 
+const countriesData = inject('dataCountries');
 const showMoreDetails = ref(false);
 const containerMoreDetails = ref(null);
+const country = computed(() => {
+  return countriesData.value.find(
+    (countryData) => countryData.name.common === props.countryName
+  );
+});
 
 const addMoreDetails = () => {
   showMoreDetails.value = !showMoreDetails.value;
