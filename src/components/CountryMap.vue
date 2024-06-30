@@ -23,11 +23,11 @@ const back = () => {
 </script>
 
 <template>
-  <h2>{{ countryName }} Map</h2>
-  <Button @click="back" buttonText="Back to Countries" />
+  <Button @click.prevent="back" buttonText="Back to Countries" />
+
   <GoogleMap
     api-key="AIzaSyAaPPNf2xqKL0k3EWgqD_NPCRDjCGLozmM"
-    style="width: 100vw; height: 100vh"
+    style="width: 95vw; height: 95vh"
     :center="{
       lat: country.latlng[0],
       lng: country.latlng[1],

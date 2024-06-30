@@ -58,10 +58,10 @@ provide('dataCountriesMap', coordinatesCountries);
 <template>
   <div class="app">
     <ToggleMode />
-    <h1 class="title">{{ title }}</h1>
+    <h1 class="title">{{ selectedCountryMap ? selectedCountryMap : title }}</h1>
     <div class="block-countries" v-if="!selectedCountryMap">
       <Button
-        @click="sortСountries(sortedCountries)"
+        @click.prevent="sortСountries(sortedCountries)"
         buttonText="Sort countries alphabetically"
       />
       <Countries
