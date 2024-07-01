@@ -4,7 +4,6 @@ import { GoogleMap, Marker } from 'vue3-google-map';
 import Button from './Button.vue';
 import { useStore } from '../store';
 
-const emits = defineEmits(['back']);
 const store = useStore();
 
 const country = computed(() => {
@@ -13,14 +12,14 @@ const country = computed(() => {
   );
 });
 
-const back = () => {
-  emits('back');
+const clearCountryMap = () => {
+  store.setComponent('Countries');
+  store.selectedCountryMap = null;
 };
 </script>
 
 <template>
-  <Button @click.prevent="back" buttonText="Back to Countries" />
-
+  <Button @click.prevent="clearCountryMap()" buttonText="Back to Countries" />
   <GoogleMap
     api-key="AIzaSyAaPPNf2xqKL0k3EWgqD_NPCRDjCGLozmM"
     style="width: 95vw; height: 95vh"

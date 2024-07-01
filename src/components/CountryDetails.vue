@@ -5,6 +5,7 @@ import { useStore } from '../store';
 const store = useStore();
 const showMoreDetails = ref(false);
 const containerMoreDetails = ref(null);
+
 const country = computed(() => {
   return store.dataCountries.find(
     (countryData) => countryData.name.common === store.selectedCountry
@@ -58,9 +59,6 @@ onBeforeUnmount(() => {
       <p class="details__desc">
         <strong>Languages: </strong
         >{{ Object.values(country.languages).join(', ') }}
-      </p>
-      <p class="details__desc">
-        <strong>Population: </strong>{{ country.population }}
       </p>
       <p class="details__desc">
         <strong>Timezones: </strong>{{ country.timezones.join(', ') }}

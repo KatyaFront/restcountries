@@ -1,9 +1,29 @@
 # Rest countries
 
+## Список выполненных требований
+
+1. Easy
+
+- создание базовой структуры Vue.js приложения;
+- использование API https://restcountries.com/ для получения списка стран;
+- отображение списка стран на странице;
+- реализация возможности выбора конкретной страны для просмотра дополнительной информации;
+- отображение базовой информации о выбранной стране (название, флаг, столица, населениеб площадьб региоб субрегион);
+- добавление сортировки стран по алфавиту;
+- адаптивный дизайн: резиновая вёрстка.
+
+2. Medium
+
+- реализация отображения подробной информации о стране (языки, валюта, временные зоныб континенты, координаты);
+- добавление карты GoogleMap с расположением страны;
+- реализация переключения темы (светлая/темная) с использованием Vue.js и библиотеки Taillwind;
+- использование Pinia для управления состоянием приложения;
+- реализация возможности добавления стран в избранное и отображения списка избранных стран.
+
 ## Установка
 
 1. Клонируйте репозиторий:
-   `git clone ____`
+   `git clone https://github.com/KatyaFront/restcountries.git`
 
 2. Установите зависимости:
    `npm install`
@@ -18,7 +38,3 @@
 
 3. Запустить локальный сервер для предварительного просмотра собранного проекта:
    `npm run preview`
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).

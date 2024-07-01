@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 import ToggleMode from './components/ToggleMode.vue';
 import Button from './components/Button.vue';
 import Countries from './components/Countries.vue';
 import CountryMap from './components/CountryMap.vue';
+import FavoriteCountries from './components/FavoriteCountries.vue';
 import { useStore } from './store';
 
 const store = useStore();
@@ -11,6 +12,11 @@ const store = useStore();
 onMounted(async () => {
   await store.fetchDataCountries();
 });
+
+const showFavoriteCountries = () => {
+  store.setComponent('FavoriteCountries');
+  store.title = 'Favorite Countries';
+};
 </script>
 
 <template>
@@ -19,14 +25,21 @@ onMounted(async () => {
     <h1 class="title">
       {{ store.selectedCountryMap ? store.selectedCountryMap : store.title }}
     </h1>
-    <div class="block-countries" v-if="!store.selectedCountryMap">
-      <Button
-        @click.prevent="store.sortСountries()"
-        buttonText="Sort countries alphabetically"
-      />
-      <Countries @show-country-map="store.renderCountryMap" />
+    <div class="block-countries" v-if="store.currentComponent === 'Countries'">
+      <div class="block-buttons">
+        <Button
+          @click.prevent="store.sortСountries()"
+          buttonText="sort alphabetically"
+        />
+        <Button
+          buttonText="show favorite"
+          @click.prevent="showFavoriteCountries()"
+        />
+      </div>
+      <Countries />
     </div>
-    <CountryMap v-if="store.selectedCountryMap" @back="store.clearCountryMap" />
+    <CountryMap v-if="store.currentComponent === 'CountryMap'" />
+    <FavoriteCountries v-if="store.currentComponent === 'FavoriteCountries'" />
   </div>
 </template>
 
@@ -48,5 +61,10 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.block-buttons {
+  display: flex;
+  column-gap: 10px;
 }
 </style>

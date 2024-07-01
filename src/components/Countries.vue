@@ -1,13 +1,14 @@
 <script setup>
+import '@fortawesome/fontawesome-free/css/all.css';
 import Button from './Button.vue';
 import CountryDetails from './CountryDetails.vue';
 import { useStore } from '../store';
 
-const emits = defineEmits(['show-country-map']);
 const store = useStore();
 
 const showCountryMap = (country) => {
-  emits('show-country-map', country);
+  store.renderCountryMap(country);
+  store.setComponent('CountryMap');
 };
 </script>
 
@@ -16,18 +17,29 @@ const showCountryMap = (country) => {
     <li
       class="list__item"
       v-for="country in store.sortedCountries"
-      :key="country"
+      :key="country.name"
     >
-      <p>{{ country }}</p>
+      <p>
+        {{ country.name }}
+        <i
+          :class="[
+            'fa list__icon',
+            country.isFavorite ? 'fa-star' : 'fa-star-o',
+          ]"
+          @click="store.toggleFavorite(country)"
+        ></i>
+      </p>
       <div class="list__buttons">
         <Button
-          @click.prevent="store.showCountryDetails(country)"
+          @click.prevent="store.showCountryDetails(country.name)"
           buttonText="details"
         />
-        <Button @click.prevent="showCountryMap(country)" buttonText="map" />
+        <Button
+          @click.prevent="showCountryMap(country.name)"
+          buttonText="map"
+        />
       </div>
-
-      <CountryDetails v-if="store.selectedCountry === country" />
+      <CountryDetails v-if="store.selectedCountry === country.name" />
     </li>
   </ul>
 </template>
@@ -44,7 +56,13 @@ const showCountryMap = (country) => {
 .list__item {
   display: flex;
   flex-direction: column;
-  column-gap: 15px;
+  gap: 15px;
+}
+
+.list__icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .list__buttons {
