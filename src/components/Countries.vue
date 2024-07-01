@@ -1,13 +1,8 @@
 <script setup>
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import Button from './Button.vue';
 import CountryDetails from './CountryDetails.vue';
 import { useStore } from '../store';
-
-library.add(faStar, faStarRegular);
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const store = useStore();
 
@@ -59,6 +54,8 @@ const showCountryMap = (country) => {
 .list__item {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 15px;
 }
 

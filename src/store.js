@@ -57,6 +57,9 @@ export const useStore = defineStore('store', {
     showCountryDetails(country) {
       this.selectedCountry = this.selectedCountry === country ? null : country;
     },
+    clearCountryDetails() {
+      this.selectedCountry = null;
+    },
     renderCountryMap(country) {
       this.selectedCountryMap = country;
     },

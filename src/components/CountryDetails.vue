@@ -36,6 +36,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="details bg-white dark:bg-gray-500" ref="containerMoreDetails">
+    <font-awesome-icon
+      icon="times"
+      class="details__close"
+      @click="store.clearCountryDetails()"
+    />
     <img
       class="details__img"
       :src="country.flags.png"
@@ -55,7 +60,7 @@ onBeforeUnmount(() => {
     <a href="#" class="details__link" @click.prevent="addMoreDetails"
       >detailed information about the country</a
     >
-    <div class="details details-more" v-if="showMoreDetails">
+    <div class="details__more" v-if="showMoreDetails">
       <p class="details__desc">
         <strong>Languages: </strong
         >{{ Object.values(country.languages).join(', ') }}
@@ -75,6 +80,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .details {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,11 +88,23 @@ onBeforeUnmount(() => {
   max-width: 80vw;
   margin: 0 auto;
   margin-top: 5px;
-  padding: 15px;
+  padding: 30px;
   border-radius: 10px;
+  border: 1px solid var(--primary-text-color);
 }
 
-.details-more {
+.details__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.details__more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
   padding: 0;
 }
 
