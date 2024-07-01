@@ -1,8 +1,13 @@
 <script setup>
-import '@fortawesome/fontawesome-free/css/all.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import Button from './Button.vue';
 import CountryDetails from './CountryDetails.vue';
 import { useStore } from '../store';
+
+library.add(faStar, faStarRegular);
 
 const store = useStore();
 
@@ -19,15 +24,13 @@ const showCountryMap = (country) => {
       v-for="country in store.sortedCountries"
       :key="country.name"
     >
-      <p>
+      <p class="list__desc">
         {{ country.name }}
-        <i
-          :class="[
-            'fa list__icon',
-            country.isFavorite ? 'fa-star' : 'fa-star-o',
-          ]"
+        <font-awesome-icon
+          :icon="[country.isFavorite ? 'fas' : 'far', 'star']"
+          class="list__icon"
           @click="store.toggleFavorite(country)"
-        ></i>
+        />
       </p>
       <div class="list__buttons">
         <Button
@@ -57,6 +60,12 @@ const showCountryMap = (country) => {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.list__desc {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
 }
 
 .list__icon {
