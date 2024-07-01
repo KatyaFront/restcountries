@@ -1,19 +1,10 @@
 <script setup>
-import { ref } from 'vue';
 import Button from './Button.vue';
 import CountryDetails from './CountryDetails.vue';
+import { useStore } from '../store';
 
-const props = defineProps({
-  countries: Array,
-  required: true,
-});
-
-const selectedCountry = ref(null);
 const emits = defineEmits(['show-country-map']);
-
-const showCountryDetails = (country) => {
-  selectedCountry.value = selectedCountry.value === country ? null : country;
-};
+const store = useStore();
 
 const showCountryMap = (country) => {
   emits('show-country-map', country);
@@ -22,20 +13,21 @@ const showCountryMap = (country) => {
 
 <template>
   <ul class="list">
-    <li class="list__item" v-for="country in countries" :key="country">
+    <li
+      class="list__item"
+      v-for="country in store.sortedCountries"
+      :key="country"
+    >
       <p>{{ country }}</p>
       <div class="list__buttons">
         <Button
-          @click.prevent="showCountryDetails(country)"
+          @click.prevent="store.showCountryDetails(country)"
           buttonText="details"
         />
         <Button @click.prevent="showCountryMap(country)" buttonText="map" />
       </div>
 
-      <CountryDetails
-        v-if="selectedCountry === country"
-        :countryName="selectedCountry"
-      />
+      <CountryDetails v-if="store.selectedCountry === country" />
     </li>
   </ul>
 </template>

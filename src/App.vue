@@ -1,79 +1,32 @@
 <script setup>
-import { ref, onMounted, provide } from 'vue';
-import axios from 'axios';
+import { onMounted, computed } from 'vue';
 import ToggleMode from './components/ToggleMode.vue';
 import Button from './components/Button.vue';
 import Countries from './components/Countries.vue';
 import CountryMap from './components/CountryMap.vue';
+import { useStore } from './store';
 
-const title = ref('Rest countries');
-const dataCountries = ref([]);
-const sortedCountries = ref([]);
-const coordinatesCountries = ref([]);
-const selectedCountryMap = ref(null);
-let sortDirection = 'asc';
+const store = useStore();
 
 onMounted(async () => {
-  try {
-    const response = await axios.get('https://restcountries.com/v3.1/all');
-    dataCountries.value = response.data;
-    sortedCountries.value = dataCountries.value.map(
-      (country) => country.name.common
-    );
-    coordinatesCountries.value = dataCountries.value.map((country) => {
-      return {
-        name: country.name.common,
-        latlng: country.latlng,
-      };
-    });
-  } catch (error) {
-    console.error('Error loading data', error);
-  }
+  await store.fetchDataCountries();
 });
-
-const sortСountries = (countries) => {
-  countries.sort((a, b) => {
-    if (sortDirection === 'asc') {
-      return a.localeCompare(b);
-    } else {
-      return b.localeCompare(a);
-    }
-  });
-  sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-};
-
-const renderCountryMap = (country) => {
-  selectedCountryMap.value = country;
-};
-
-const clearCountryMap = () => {
-  selectedCountryMap.value = null;
-};
-
-provide('dataCountries', dataCountries);
-provide('dataCountriesName', sortedCountries);
-provide('dataCountriesMap', coordinatesCountries);
 </script>
 
 <template>
   <div class="app">
     <ToggleMode />
-    <h1 class="title">{{ selectedCountryMap ? selectedCountryMap : title }}</h1>
-    <div class="block-countries" v-if="!selectedCountryMap">
+    <h1 class="title">
+      {{ store.selectedCountryMap ? store.selectedCountryMap : store.title }}
+    </h1>
+    <div class="block-countries" v-if="!store.selectedCountryMap">
       <Button
-        @click.prevent="sortСountries(sortedCountries)"
+        @click.prevent="store.sortСountries()"
         buttonText="Sort countries alphabetically"
       />
-      <Countries
-        :countries="sortedCountries"
-        @show-country-map="renderCountryMap"
-      />
+      <Countries @show-country-map="store.renderCountryMap" />
     </div>
-    <CountryMap
-      v-if="selectedCountryMap"
-      :countryName="selectedCountryMap"
-      @back="clearCountryMap"
-    />
+    <CountryMap v-if="store.selectedCountryMap" @back="store.clearCountryMap" />
   </div>
 </template>
 
@@ -85,7 +38,7 @@ provide('dataCountriesMap', coordinatesCountries);
 }
 
 .title {
-  margin-bottom: 30px;
+  margin: 30px 0;
   text-align: center;
   font-size: 36px;
   font-weight: 700;

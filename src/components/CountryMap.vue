@@ -1,19 +1,15 @@
 <script setup>
-import { inject, computed } from 'vue';
+import { computed } from 'vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
 import Button from './Button.vue';
+import { useStore } from '../store';
 
-const props = defineProps({
-  countryName: String,
-  required: true,
-});
-
-const coordinatesCountry = inject('dataCountriesMap');
 const emits = defineEmits(['back']);
+const store = useStore();
 
 const country = computed(() => {
-  return coordinatesCountry.value.find(
-    (country) => country.name === props.countryName
+  return store.coordinatesCountries.find(
+    (country) => country.name === store.selectedCountryMap
   );
 });
 

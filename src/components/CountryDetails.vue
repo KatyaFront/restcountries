@@ -1,17 +1,13 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, inject, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useStore } from '../store';
 
-const props = defineProps({
-  countryName: String,
-  required: true,
-});
-
-const countriesData = inject('dataCountries');
+const store = useStore();
 const showMoreDetails = ref(false);
 const containerMoreDetails = ref(null);
 const country = computed(() => {
-  return countriesData.value.find(
-    (countryData) => countryData.name.common === props.countryName
+  return store.dataCountries.find(
+    (countryData) => countryData.name.common === store.selectedCountry
   );
 });
 
@@ -58,7 +54,7 @@ onBeforeUnmount(() => {
     <a href="#" class="details__link" @click.prevent="addMoreDetails"
       >detailed information about the country</a
     >
-    <div class="details" v-if="showMoreDetails">
+    <div class="details details-more" v-if="showMoreDetails">
       <p class="details__desc">
         <strong>Languages: </strong
         >{{ Object.values(country.languages).join(', ') }}
@@ -85,14 +81,20 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
-  max-width: 30vw;
+  max-width: 80vw;
   margin: 0 auto;
   margin-top: 5px;
   padding: 15px;
   border-radius: 10px;
 }
 
+.details-more {
+  padding: 0;
+}
+
 .details__desc {
+  max-width: 50%;
+  text-align: center;
   font-size: 16px;
 }
 
