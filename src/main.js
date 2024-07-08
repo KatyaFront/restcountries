@@ -11,7 +11,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 const pinia = createPinia();
 const app = createApp(App);
 
-library.add(faStar, faStarRegular, faTimes, faTimes);
+library.add(faStar, faStarRegular, faTimes);
 
 app.use(pinia);
 app.mount('#app');

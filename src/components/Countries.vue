@@ -16,7 +16,7 @@ const showCountryMap = (country) => {
   <ul class="list">
     <li
       class="list__item"
-      v-for="country in store.sortedCountries"
+      v-for="country in store.displayCountries"
       :key="country.name"
     >
       <p class="list__desc">

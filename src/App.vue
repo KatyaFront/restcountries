@@ -5,6 +5,7 @@ import Button from './components/Button.vue';
 import Countries from './components/Countries.vue';
 import CountryMap from './components/CountryMap.vue';
 import FavoriteCountries from './components/FavoriteCountries.vue';
+import Search from './components/Search.vue';
 import { useStore } from './store';
 
 const store = useStore();
@@ -26,15 +27,18 @@ const showFavoriteCountries = () => {
       {{ store.selectedCountryMap ? store.selectedCountryMap : store.title }}
     </h1>
     <div class="block-countries" v-if="store.currentComponent === 'Countries'">
-      <div class="block-buttons">
-        <Button
-          @click.prevent="store.sortСountries()"
-          buttonText="sort alphabetically"
-        />
-        <Button
-          buttonText="show favorite"
-          @click.prevent="showFavoriteCountries()"
-        />
+      <div class="block-buttons-search">
+        <div class="block-buttons">
+          <Button
+            @click.prevent="store.sortСountries()"
+            buttonText="sort alphabetically"
+          />
+          <Button
+            buttonText="show favorite"
+            @click.prevent="showFavoriteCountries()"
+          />
+        </div>
+        <Search />
       </div>
       <Countries />
     </div>
@@ -61,10 +65,19 @@ const showFavoriteCountries = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 50%;
+}
+
+.block-buttons-search {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .block-buttons {
   display: flex;
+  justify-content: center;
   column-gap: 10px;
 }
 </style>

@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
       @click="store.clearCountryDetails()"
     />
     <img
-      class="details__img"
+      class="details__img border-slate-500 dark:border-white"
       :src="country.flags.png"
       :alt="country.name.common"
     />
@@ -117,6 +117,7 @@ onBeforeUnmount(() => {
 .details__img {
   width: 120px;
   height: 80px;
+  border: 1px solid;
 }
 
 .details__link {
