@@ -7,8 +7,8 @@ const showMoreDetails = ref(false);
 const containerMoreDetails = ref(null);
 
 const country = computed(() => {
-  return store.dataCountries.find(
-    (countryData) => countryData.name.common === store.selectedCountry
+  return store.filteredCountries.find(
+    (country) => country.name.common === store.selectedCountry
   );
 });
 
@@ -47,7 +47,7 @@ onBeforeUnmount(() => {
       :alt="country.name.common"
     />
     <p class="details__desc">
-      <strong>Capital: </strong>{{ country.capital.join(', ') }}
+      <strong>Capital: </strong>{{ country.capital?.join(', ') }}
     </p>
     <p class="details__desc">
       <strong>Population: </strong>{{ country.population }}

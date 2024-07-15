@@ -1,25 +1,18 @@
 <script setup>
 import { computed } from 'vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
-import Button from './Button.vue';
 import { useStore } from '../store';
 
 const store = useStore();
 
 const country = computed(() => {
-  return store.coordinatesCountries.find(
-    (country) => country.name === store.selectedCountryMap
+  return store.countries.find(
+    (country) => country.name.common === store.selectedCountryMap
   );
 });
-
-const clearCountryMap = () => {
-  store.setComponent('Countries');
-  store.selectedCountryMap = null;
-};
 </script>
 
 <template>
-  <Button @click.prevent="clearCountryMap()" buttonText="Back to Countries" />
   <GoogleMap
     api-key="AIzaSyAaPPNf2xqKL0k3EWgqD_NPCRDjCGLozmM"
     style="width: 95vw; height: 95vh"

@@ -8,15 +8,15 @@ const store = useStore();
   <ul class="list">
     <li
       class="list__item"
-      v-for="country in store.favoriteCountries"
-      :key="country"
+      v-for="country in store.history"
+      :key="country.name.common"
     >
       <p>
-        {{ country }}
+        {{ country.name.common }}
       </p>
     </li>
   </ul>
-  <p v-if="store.favoriteCountries.length === 0">No favorite countries</p>
+  <p v-if="store.history.length === 0">No viewed countries</p>
 </template>
 
 <style scoped>

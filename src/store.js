@@ -6,31 +6,26 @@ export const useStore = defineStore('store', {
     mode: 'light',
     title: 'Rest countries',
     currentComponent: 'Countries',
-    sortDirection: 'asc',
-    dataCountries: [],
-    sortedCountries: [],
-    coordinatesCountries: [],
+    countries: [],
     favoriteCountries: [],
     selectedCountry: null,
     selectedCountryMap: null,
+    sortDirectionAlphabetically: 'asc',
+    sortDirectionPopulation: true,
+    sortDirectionArea: true,
     searchQuery: '',
-    filteredCountries: [],
+    viewedCountries: [],
+    history: [],
   }),
+
   actions: {
     async fetchDataCountries() {
       try {
         const response = await axios.get('https://restcountries.com/v3.1/all');
-        this.dataCountries = response.data;
-        this.sortedCountries = this.dataCountries.map((country) => {
+        this.countries = response.data.map((country) => {
           return {
-            name: country.name.common,
+            ...country,
             isFavorite: false,
-          };
-        });
-        this.coordinatesCountries = this.dataCountries.map((country) => {
-          return {
-            name: country.name.common,
-            latlng: country.latlng,
           };
         });
       } catch (error) {
@@ -46,7 +41,6 @@ export const useStore = defineStore('store', {
     setTitle(newTitle) {
       this.title = newTitle;
     },
-
     showCountryDetails(country) {
       this.selectedCountry = this.selectedCountry === country ? null : country;
     },
@@ -56,49 +50,78 @@ export const useStore = defineStore('store', {
     renderCountryMap(country) {
       this.selectedCountryMap = country;
     },
-    clearCountryMap() {
-      this.selectedCountryMap = null;
+    backCountries() {
+      this.setComponent('Countries');
+      this.title = 'Rest countries';
     },
     toggleFavorite(country) {
       country.isFavorite = !country.isFavorite;
       if (country.isFavorite) {
-        this.favoriteCountries.push(country.name);
+        this.favoriteCountries.push(country.name.common);
       } else {
-        let index = this.favoriteCountries.indexOf(country.name);
+        let index = this.favoriteCountries.indexOf(country.name.common);
         this.favoriteCountries.splice(index, 1);
       }
     },
-    sortСountries() {
-      this.displayCountries.sort((a, b) => {
-        if (this.sortDirection === 'asc') {
-          return a.name.localeCompare(b.name);
+    sortAlphabetically() {
+      this.filteredCountries.sort((a, b) => {
+        if (this.sortDirectionAlphabetically === 'asc') {
+          return a.name.common.localeCompare(b.name.common);
         } else {
-          return b.name.localeCompare(a.name);
+          return b.name.common.localeCompare(a.name.common);
         }
       });
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+      this.sortDirectionAlphabetically =
+        this.sortDirectionAlphabetically === 'asc' ? 'desc' : 'asc';
     },
-    filterCountries() {
-      const query = this.searchQuery.toLowerCase();
-      this.filteredCountries = this.sortedCountries.filter((country) =>
-        country.name.toLowerCase().includes(query)
+    sortPopulation() {
+      this.filteredCountries.sort((a, b) => {
+        if (this.sortDirectionPopulation) {
+          return a.population - b.population;
+        } else {
+          return b.population - a.population;
+        }
+      });
+      this.sortDirectionPopulation = !this.sortDirectionPopulation;
+    },
+    sortArea() {
+      this.filteredCountries.sort((a, b) => {
+        if (this.sortDirectionArea) {
+          return a.area - b.area;
+        } else {
+          return b.area - a.area;
+        }
+      });
+      this.sortDirectionArea = !this.sortDirectionArea;
+    },
+    addToHistory(country) {
+      if (!this.viewedCountries.includes(country)) {
+        this.viewedCountries.push(country);
+        this.saveHistory();
+      }
+    },
+    saveHistory() {
+      localStorage.setItem(
+        'viewedCountries',
+        JSON.stringify(this.viewedCountries)
       );
     },
+    loadingHistory() {
+      const dataHistory = localStorage.getItem('viewedCountries');
+      if (dataHistory) {
+        this.history = JSON.parse(dataHistory);
+      }
+    },
   },
+
   getters: {
-    // sortedCountries(state) {
-    //     return [...state.countries].sort((a, b) => a[state.sortKey].localeCompare(b[state.sortKey]));
-    // },
-    // filteredCountries(state) {
-    //     const query = state.searchQuery.toLowerCase();
-    //     return state.countries.filter(country =>
-    //         country.name.toLowerCase().includes(query)
-    //     );
-    // },
-    displayCountries(state) {
+    filteredCountries(state) {
+      const query = state.searchQuery.toLowerCase();
       return state.searchQuery === ''
-        ? this.sortedCountries
-        : this.filteredCountries;
+        ? state.countries
+        : state.countries.filter((country) =>
+            country.name.common.toLowerCase().includes(query)
+          );
     },
   },
 });

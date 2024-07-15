@@ -10,17 +10,22 @@ const showCountryMap = (country) => {
   store.renderCountryMap(country);
   store.setComponent('CountryMap');
 };
+
+const viewCountryAndAddHistory = (countryName, country) => {
+  store.showCountryDetails(countryName);
+  store.addToHistory(country);
+};
 </script>
 
 <template>
   <ul class="list">
     <li
       class="list__item"
-      v-for="country in store.displayCountries"
-      :key="country.name"
+      v-for="country in store.filteredCountries"
+      :key="country.name.common"
     >
       <p class="list__desc">
-        {{ country.name }}
+        {{ country.name.common }}
         <font-awesome-icon
           :icon="[country.isFavorite ? 'fas' : 'far', 'star']"
           class="list__icon"
@@ -29,15 +34,17 @@ const showCountryMap = (country) => {
       </p>
       <div class="list__buttons">
         <Button
-          @click.prevent="store.showCountryDetails(country.name)"
+          @click.prevent="
+            viewCountryAndAddHistory(country.name.common, country)
+          "
           buttonText="details"
         />
         <Button
-          @click.prevent="showCountryMap(country.name)"
+          @click.prevent="showCountryMap(country.name.common)"
           buttonText="map"
         />
       </div>
-      <CountryDetails v-if="store.selectedCountry === country.name" />
+      <CountryDetails v-if="store.selectedCountry === country.name.common" />
     </li>
   </ul>
 </template>

@@ -1,12 +1,13 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useStore } from './store';
 import ToggleMode from './components/ToggleMode.vue';
 import Button from './components/Button.vue';
 import Countries from './components/Countries.vue';
 import CountryMap from './components/CountryMap.vue';
 import FavoriteCountries from './components/FavoriteCountries.vue';
+import ViewedCountries from './components/ViewedCountries.vue';
 import Search from './components/Search.vue';
-import { useStore } from './store';
 
 const store = useStore();
 
@@ -18,6 +19,12 @@ const showFavoriteCountries = () => {
   store.setComponent('FavoriteCountries');
   store.title = 'Favorite Countries';
 };
+
+const showViewedCountries = () => {
+  store.loadingHistory();
+  store.setComponent('ViewedCountries');
+  store.title = 'Viewed Countries';
+};
 </script>
 
 <template>
@@ -26,17 +33,33 @@ const showFavoriteCountries = () => {
     <h1 class="title">
       {{ store.selectedCountryMap ? store.selectedCountryMap : store.title }}
     </h1>
+    <Button
+      v-if="store.currentComponent !== 'Countries'"
+      @click.prevent="store.backCountries()"
+      buttonText="Back to Countries"
+    />
     <div class="block-countries" v-if="store.currentComponent === 'Countries'">
       <div class="block-buttons-search">
         <div class="block-buttons">
           <Button
-            @click.prevent="store.sortСountries()"
-            buttonText="sort alphabetically"
-          />
-          <Button
             buttonText="show favorite"
             @click.prevent="showFavoriteCountries()"
           />
+          <Button
+            buttonText="show viewed countries"
+            @click.prevent="showViewedCountries()"
+          />
+        </div>
+        <div class="block-buttons">
+          <Button
+            @click.prevent="store.sortAlphabetically()"
+            buttonText="sort alphabetically"
+          />
+          <Button
+            @click.prevent="store.sortPopulation()"
+            buttonText="sort by population"
+          />
+          <Button @click.prevent="store.sortArea()" buttonText="sort by area" />
         </div>
         <Search />
       </div>
@@ -44,6 +67,7 @@ const showFavoriteCountries = () => {
     </div>
     <CountryMap v-if="store.currentComponent === 'CountryMap'" />
     <FavoriteCountries v-if="store.currentComponent === 'FavoriteCountries'" />
+    <ViewedCountries v-if="store.currentComponent === 'ViewedCountries'" />
   </div>
 </template>
 

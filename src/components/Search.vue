@@ -10,7 +10,6 @@ const store = useStore();
     v-model="store.searchQuery"
     type="text"
     placeholder="country search"
-    @input="store.filterCountries"
   />
 </template>
 
