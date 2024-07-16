@@ -21,7 +21,7 @@ const viewCountryAndAddHistory = (countryName, country) => {
   <ul class="list">
     <li
       class="list__item"
-      v-for="country in store.filteredCountries"
+      v-for="country in store.sortedCountries"
       :key="country.name.common"
     >
       <p class="list__desc">
@@ -54,7 +54,7 @@ const viewCountryAndAddHistory = (countryName, country) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 15px;
+  row-gap: 30px;
   text-align: center;
 }
 

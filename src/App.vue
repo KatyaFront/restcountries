@@ -8,6 +8,7 @@ import CountryMap from './components/CountryMap.vue';
 import FavoriteCountries from './components/FavoriteCountries.vue';
 import ViewedCountries from './components/ViewedCountries.vue';
 import Search from './components/Search.vue';
+import Sorting from './components/Sorting.vue';
 
 const store = useStore();
 
@@ -46,21 +47,11 @@ const showViewedCountries = () => {
             @click.prevent="showFavoriteCountries()"
           />
           <Button
-            buttonText="show viewed countries"
+            buttonText="viewed countries"
             @click.prevent="showViewedCountries()"
           />
         </div>
-        <div class="block-buttons">
-          <Button
-            @click.prevent="store.sortAlphabetically()"
-            buttonText="sort alphabetically"
-          />
-          <Button
-            @click.prevent="store.sortPopulation()"
-            buttonText="sort by population"
-          />
-          <Button @click.prevent="store.sortArea()" buttonText="sort by area" />
-        </div>
+        <Sorting />
         <Search />
       </div>
       <Countries />
@@ -76,10 +67,11 @@ const showViewedCountries = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 30px;
 }
 
 .title {
-  margin: 30px 0;
+  margin-top: 30px;
   text-align: center;
   font-size: 36px;
   font-weight: 700;
@@ -97,6 +89,7 @@ const showViewedCountries = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  row-gap: 30px;
 }
 
 .block-buttons {

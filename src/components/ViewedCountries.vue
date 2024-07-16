@@ -20,12 +20,6 @@ const store = useStore();
 </template>
 
 <style scoped>
-.title {
-  margin-bottom: 30px;
-  font-size: 28px;
-  font-weight: 700;
-}
-
 .list {
   display: flex;
   flex-direction: column;

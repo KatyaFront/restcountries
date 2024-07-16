@@ -109,7 +109,6 @@ onBeforeUnmount(() => {
 }
 
 .details__desc {
-  max-width: 50%;
   text-align: center;
   font-size: 16px;
 }

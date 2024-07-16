@@ -13,7 +13,6 @@ defineProps({
 <style scoped>
 .button {
   align-self: center;
-  margin-bottom: 30px;
   padding: 10px;
   font-size: 16px;
   border-radius: 10px;
