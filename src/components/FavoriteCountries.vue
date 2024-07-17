@@ -5,7 +5,7 @@ const store = useStore();
 </script>
 
 <template>
-  <ul class="list">
+  <ul class="list" v-if="store.favoriteCountries.length !== 0">
     <li
       class="list__item"
       v-for="country in store.favoriteCountries"

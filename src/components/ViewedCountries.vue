@@ -5,18 +5,18 @@ const store = useStore();
 </script>
 
 <template>
-  <ul class="list">
+  <ul class="list" v-if="store.viewedCountries.length !== 0">
     <li
       class="list__item"
-      v-for="country in store.history"
-      :key="country.name.common"
+      v-for="country in store.viewedCountries"
+      :key="country"
     >
       <p>
-        {{ country.name.common }}
+        {{ country }}
       </p>
     </li>
   </ul>
-  <p v-if="store.history.length === 0">No viewed countries</p>
+  <p v-if="store.viewedCountries.length === 0">No viewed countries</p>
 </template>
 
 <style scoped>

@@ -1,19 +1,14 @@
 <script setup>
-import Button from './Button.vue';
-import CountryDetails from './CountryDetails.vue';
-import { useStore } from '../store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useStore } from '../store';
 
 const store = useStore();
 
-const showCountryMap = (country) => {
-  store.renderCountryMap(country);
-  store.setComponent('CountryMap');
-};
-
-const viewCountryAndAddHistory = (countryName, country) => {
+const showCountryDetailsAndAddHistory = (countryName) => {
   store.showCountryDetails(countryName);
-  store.addToHistory(country);
+  store.setComponent('CountryDetails');
+  store.addToHistory(countryName);
+  store.setTitle(countryName);
 };
 </script>
 
@@ -24,27 +19,20 @@ const viewCountryAndAddHistory = (countryName, country) => {
       v-for="country in store.sortedCountries"
       :key="country.name.common"
     >
-      <p class="list__desc">
-        {{ country.name.common }}
+      <div class="list__block-link-star">
+        <router-link
+          to="/details"
+          class="list__link"
+          @click="showCountryDetailsAndAddHistory(country.name.common)"
+        >
+          {{ country.name.common }}
+        </router-link>
         <font-awesome-icon
           :icon="[country.isFavorite ? 'fas' : 'far', 'star']"
           class="list__icon"
           @click="store.toggleFavorite(country)"
         />
-      </p>
-      <div class="list__buttons">
-        <Button
-          @click.prevent="
-            viewCountryAndAddHistory(country.name.common, country)
-          "
-          buttonText="details"
-        />
-        <Button
-          @click.prevent="showCountryMap(country.name.common)"
-          buttonText="map"
-        />
       </div>
-      <CountryDetails v-if="store.selectedCountry === country.name.common" />
     </li>
   </ul>
 </template>
@@ -66,21 +54,30 @@ const viewCountryAndAddHistory = (countryName, country) => {
   gap: 15px;
 }
 
-.list__desc {
+.list__block-link-star {
+  display: flex;
+  column-gap: 10px;
+}
+
+.list__link {
   display: flex;
   align-items: center;
   column-gap: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+.list__link:hover {
+  color: var(--secondary-text-color);
+}
+
+.list__link:active {
+  transform: translateY(-5px);
 }
 
 .list__icon {
   width: 30px;
   height: 30px;
   cursor: pointer;
-}
-
-.list__buttons {
-  display: flex;
-  justify-content: center;
-  column-gap: 10px;
 }
 </style>

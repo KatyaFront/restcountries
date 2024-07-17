@@ -4,6 +4,7 @@ import { useStore } from './store';
 import ToggleMode from './components/ToggleMode.vue';
 import Button from './components/Button.vue';
 import Countries from './components/Countries.vue';
+import CountryDetails from './components/CountryDetails.vue';
 import CountryMap from './components/CountryMap.vue';
 import FavoriteCountries from './components/FavoriteCountries.vue';
 import ViewedCountries from './components/ViewedCountries.vue';
@@ -18,13 +19,13 @@ onMounted(async () => {
 
 const showFavoriteCountries = () => {
   store.setComponent('FavoriteCountries');
-  store.title = 'Favorite Countries';
+  store.setTitle('Favorite Countries');
 };
 
 const showViewedCountries = () => {
   store.loadingHistory();
   store.setComponent('ViewedCountries');
-  store.title = 'Viewed Countries';
+  store.setTitle('Viewed Countries');
 };
 </script>
 
@@ -32,15 +33,17 @@ const showViewedCountries = () => {
   <div class="app">
     <ToggleMode />
     <h1 class="title">
-      {{ store.selectedCountryMap ? store.selectedCountryMap : store.title }}
+      {{ store.title }}
     </h1>
-    <Button
+    <router-link
+      class="link-back"
+      to="/"
       v-if="store.currentComponent !== 'Countries'"
-      @click.prevent="store.backCountries()"
-      buttonText="Back to Countries"
-    />
+      @click="store.backCountries()"
+      >Back to Countries</router-link
+    >
     <div class="block-countries" v-if="store.currentComponent === 'Countries'">
-      <div class="block-buttons-search">
+      <div class="block-buttons-search-sort">
         <div class="block-buttons">
           <Button
             buttonText="show favorite"
@@ -56,6 +59,9 @@ const showViewedCountries = () => {
       </div>
       <Countries />
     </div>
+    <router-view
+      ><CountryDetails v-if="store.currentComponent === 'CountryDetails'"
+    /></router-view>
     <CountryMap v-if="store.currentComponent === 'CountryMap'" />
     <FavoriteCountries v-if="store.currentComponent === 'FavoriteCountries'" />
     <ViewedCountries v-if="store.currentComponent === 'ViewedCountries'" />
@@ -77,6 +83,20 @@ const showViewedCountries = () => {
   font-weight: 700;
 }
 
+.link-back {
+  color: var(--secondary-text-color);
+  text-decoration: underline;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+.link-back:hover {
+  color: var(--tertiary-text-color);
+}
+
+.link-back:active {
+  transform: translateY(-5px);
+}
+
 .block-countries {
   display: flex;
   flex-direction: column;
@@ -84,7 +104,7 @@ const showViewedCountries = () => {
   max-width: 50%;
 }
 
-.block-buttons-search {
+.block-buttons-search-sort {
   display: flex;
   flex-direction: column;
   justify-content: center;

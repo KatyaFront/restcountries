@@ -1,10 +1,9 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { computed } from 'vue';
 import { useStore } from '../store';
+import Button from './Button.vue';
 
 const store = useStore();
-const showMoreDetails = ref(false);
-const containerMoreDetails = ref(null);
 
 const country = computed(() => {
   return store.filteredCountries.find(
@@ -12,39 +11,23 @@ const country = computed(() => {
   );
 });
 
-const addMoreDetails = () => {
-  showMoreDetails.value = !showMoreDetails.value;
+const showCountryMap = (countryName) => {
+  store.renderCountryMap(countryName);
+  store.setComponent('CountryMap');
+  store.setTitle(countryName);
 };
-
-const handleClickOutside = (event) => {
-  if (
-    containerMoreDetails.value &&
-    !containerMoreDetails.value.contains(event.target)
-  ) {
-    showMoreDetails.value = false;
-  }
-};
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
 </script>
 
 <template>
-  <div class="details bg-white dark:bg-gray-500" ref="containerMoreDetails">
-    <font-awesome-icon
-      icon="times"
-      class="details__close"
-      @click="store.clearCountryDetails()"
-    />
+  <div class="details" ref="containerMoreDetails">
     <img
       class="details__img border-slate-500 dark:border-white"
       :src="country.flags.png"
       :alt="country.name.common"
+    />
+    <Button
+      @click.prevent="showCountryMap(country.name.common)"
+      buttonText="map"
     />
     <p class="details__desc">
       <strong>Capital: </strong>{{ country.capital?.join(', ') }}
@@ -57,10 +40,10 @@ onBeforeUnmount(() => {
     <p class="details__desc">
       <strong>Subregion:</strong> {{ country.subregion }}
     </p>
-    <a href="#" class="details__link" @click.prevent="addMoreDetails"
+    <a href="#" class="details__link" @click.prevent="store.addMoreDetails()"
       >detailed information about the country</a
     >
-    <div class="details__more" v-if="showMoreDetails">
+    <div class="details__more" v-if="store.showMoreDetails">
       <p class="details__desc">
         <strong>Languages: </strong
         >{{ Object.values(country.languages).join(', ') }}
@@ -87,17 +70,6 @@ onBeforeUnmount(() => {
   row-gap: 10px;
   max-width: 80vw;
   margin: 0 auto;
-  margin-top: 5px;
-  padding: 30px;
-  border-radius: 10px;
-  border: 1px solid var(--primary-text-color);
-}
-
-.details__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
 }
 
 .details__more {
@@ -114,15 +86,25 @@ onBeforeUnmount(() => {
 }
 
 .details__img {
-  width: 120px;
-  height: 80px;
+  width: 200px;
+  height: 120px;
   border: 1px solid;
 }
 
 .details__link {
   margin-top: 10px;
+  text-align: center;
   font-size: 14px;
   color: var(--secondary-text-color);
-  border-bottom: 1px solid var(--secondary-text-color);
+  text-decoration: underline;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+.details__link:hover {
+  color: var(--tertiary-text-color);
+}
+
+.details__link:active {
+  transform: translateY(-5px);
 }
 </style>
