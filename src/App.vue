@@ -1,11 +1,9 @@
 <script setup>
 import { onMounted } from 'vue';
+import { RouterLink, RouterView } from 'vue-router';
 import { useStore } from './store';
 import ToggleMode from './components/ToggleMode.vue';
 import Button from './components/Button.vue';
-import Countries from './components/Countries.vue';
-import CountryDetails from './components/CountryDetails.vue';
-import CountryMap from './components/CountryMap.vue';
 import FavoriteCountries from './components/FavoriteCountries.vue';
 import ViewedCountries from './components/ViewedCountries.vue';
 import Search from './components/Search.vue';
@@ -16,6 +14,11 @@ const store = useStore();
 onMounted(async () => {
   await store.fetchDataCountries();
 });
+
+const showCountries = () => {
+  store.setComponent('Countries');
+  store.setTitle('Rest countries');
+};
 
 const showFavoriteCountries = () => {
   store.setComponent('FavoriteCountries');
@@ -35,34 +38,31 @@ const showViewedCountries = () => {
     <h1 class="title">
       {{ store.title }}
     </h1>
-    <router-link
-      class="link-back"
-      to="/"
+    <RouterLink
       v-if="store.currentComponent !== 'Countries'"
-      @click="store.backCountries()"
-      >Back to Countries</router-link
+      to="/"
+      @click="showCountries()"
+      class="link"
+      >Back to Countries</RouterLink
     >
-    <div class="block-countries" v-if="store.currentComponent === 'Countries'">
-      <div class="block-buttons-search-sort">
-        <div class="block-buttons">
-          <Button
-            buttonText="show favorite"
-            @click.prevent="showFavoriteCountries()"
-          />
-          <Button
-            buttonText="viewed countries"
-            @click.prevent="showViewedCountries()"
-          />
-        </div>
-        <Sorting />
-        <Search />
+    <div
+      v-if="store.currentComponent === 'Countries'"
+      class="block-buttons-search-sort"
+    >
+      <div class="block-buttons">
+        <Button
+          buttonText="show favorite"
+          @click.prevent="showFavoriteCountries()"
+        />
+        <Button
+          buttonText="viewed countries"
+          @click.prevent="showViewedCountries()"
+        />
       </div>
-      <Countries />
+      <Sorting />
+      <Search />
     </div>
-    <router-view
-      ><CountryDetails v-if="store.currentComponent === 'CountryDetails'"
-    /></router-view>
-    <CountryMap v-if="store.currentComponent === 'CountryMap'" />
+    <RouterView />
     <FavoriteCountries v-if="store.currentComponent === 'FavoriteCountries'" />
     <ViewedCountries v-if="store.currentComponent === 'ViewedCountries'" />
   </div>
@@ -83,25 +83,18 @@ const showViewedCountries = () => {
   font-weight: 700;
 }
 
-.link-back {
+.link {
   color: var(--secondary-text-color);
   text-decoration: underline;
   transition: color 0.3s ease-in-out, transform 0.3s;
 }
 
-.link-back:hover {
+.link:hover {
   color: var(--tertiary-text-color);
 }
 
-.link-back:active {
+.link:active {
   transform: translateY(-5px);
-}
-
-.block-countries {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 50%;
 }
 
 .block-buttons-search-sort {

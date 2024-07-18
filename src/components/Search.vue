@@ -15,7 +15,6 @@ const store = useStore();
 
 <style scoped>
 .search {
-  margin-bottom: 30px;
   padding: 10px;
   padding-left: 2em;
   width: 100%;

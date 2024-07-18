@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useStore } from '../store';
 
@@ -13,20 +14,22 @@ const showCountryDetailsAndAddHistory = (countryName) => {
 </script>
 
 <template>
-  <ul class="list">
+  <ul class="list" v-if="store.currentComponent === 'Countries'">
     <li
       class="list__item"
       v-for="country in store.sortedCountries"
       :key="country.name.common"
     >
       <div class="list__block-link-star">
-        <router-link
-          to="/details"
-          class="list__link"
+        <RouterLink
+          :to="{
+            name: 'CountryDetails',
+            params: { name: country.name.common.replace(/\s+/g, '') },
+          }"
           @click="showCountryDetailsAndAddHistory(country.name.common)"
+          class="list__link"
+          >{{ country.name.common }}</RouterLink
         >
-          {{ country.name.common }}
-        </router-link>
         <font-awesome-icon
           :icon="[country.isFavorite ? 'fas' : 'far', 'star']"
           class="list__icon"

@@ -1,13 +1,17 @@
 <script setup>
 import { computed } from 'vue';
+import { useRoute, RouterLink } from 'vue-router';
 import { useStore } from '../store';
 import Button from './Button.vue';
 
 const store = useStore();
+const route = useRoute();
+
+const countryName = route.params.name;
 
 const country = computed(() => {
   return store.filteredCountries.find(
-    (country) => country.name.common === store.selectedCountry
+    (country) => country.name.common.replace(/\s+/g, '') === countryName
   );
 });
 
@@ -19,16 +23,18 @@ const showCountryMap = (countryName) => {
 </script>
 
 <template>
-  <div class="details" ref="containerMoreDetails">
+  <div class="details">
     <img
       class="details__img border-slate-500 dark:border-white"
       :src="country.flags.png"
       :alt="country.name.common"
     />
-    <Button
+    <RouterLink
+      to="/map"
       @click.prevent="showCountryMap(country.name.common)"
-      buttonText="map"
-    />
+      class="link"
+      >map</RouterLink
+    >
     <p class="details__desc">
       <strong>Capital: </strong>{{ country.capital?.join(', ') }}
     </p>
@@ -105,6 +111,20 @@ const showCountryMap = (countryName) => {
 }
 
 .details__link:active {
+  transform: translateY(-5px);
+}
+
+.link {
+  color: var(--secondary-text-color);
+  text-decoration: underline;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+.link:hover {
+  color: var(--tertiary-text-color);
+}
+
+.link:active {
   transform: translateY(-5px);
 }
 </style>
