@@ -87,35 +87,31 @@ export const useStore = defineStore('store', {
   },
 
   getters: {
+    sortedCountries(state) {
+      return [...state.countries].sort((a, b) => {
+        switch (state.selectedSortMethod) {
+          case 'alphabeticallyA':
+            return a.name.common.localeCompare(b.name.common);
+          case 'alphabeticallyZ':
+            return b.name.common.localeCompare(a.name.common);
+          case 'populationAsc':
+            return a.population - b.population;
+          case 'populationDesc':
+            return b.population - a.population;
+          case 'areaAsc':
+            return a.area - b.area;
+          case 'areaDesc':
+            return b.area - a.area;
+          default:
+            return 0;
+        }
+      });
+    },
     filteredCountries(state) {
       const query = state.searchQuery.toLowerCase();
-      return state.searchQuery === ''
-        ? state.countries
-        : state.countries.filter((country) =>
-            country.name.common.toLowerCase().includes(query)
-          );
-    },
-    sortedCountries(state) {
-      return state.selectedSortMethod === ''
-        ? state.filteredCountries
-        : state.filteredCountries.sort((a, b) => {
-            switch (state.selectedSortMethod) {
-              case 'alphabeticallyA':
-                return a.name.common.localeCompare(b.name.common);
-              case 'alphabeticallyZ':
-                return b.name.common.localeCompare(a.name.common);
-              case 'populationAsc':
-                return a.population - b.population;
-              case 'populationDesc':
-                return b.population - a.population;
-              case 'areaAsc':
-                return a.area - b.area;
-              case 'areaDesc':
-                return b.area - a.area;
-              default:
-                return 0;
-            }
-          });
+      return state.sortedCountries.filter((country) =>
+        country.name.common.toLowerCase().includes(query)
+      );
     },
   },
 });

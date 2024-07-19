@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
 import { useStore } from '../store';
-import Button from './Button.vue';
 
 const store = useStore();
 const route = useRoute();

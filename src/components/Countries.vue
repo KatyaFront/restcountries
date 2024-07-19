@@ -1,9 +1,12 @@
 <script setup>
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useStore } from '../store';
 
 const store = useStore();
+
+const filteredCountries = computed(() => store.filteredCountries);
 
 const showCountryDetailsAndAddHistory = (countryName) => {
   store.showCountryDetails(countryName);
@@ -17,7 +20,7 @@ const showCountryDetailsAndAddHistory = (countryName) => {
   <ul class="list" v-if="store.currentComponent === 'Countries'">
     <li
       class="list__item"
-      v-for="country in store.sortedCountries"
+      v-for="country in filteredCountries"
       :key="country.name.common"
     >
       <div class="list__block-link-star">
